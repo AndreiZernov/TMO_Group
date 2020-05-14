@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="Description" content="Testing Results for testing interview" />
+  <link rel="stylesheet" href="app.css" />
+  <title>Testing Results</title>
+  <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const First = () => {
+        const [input, setInput] = React.useState("");
+        const [userName, setUserName] = React.useState("");
+
+        const handleSubmit = (e) => {
+          e.preventDefault();
+          setUserName(input);
+          setInput("");
+        };
+        const handleChange = (e) => setInput(e.target.value);
+
+        return (
+          <div className="first">
+            <h1>First test</h1>
+            <p>Set the input to update user name</p>
+            <form onSubmit={handleSubmit}>
+              <input type="text" onChange={handleChange} value={input} />
+              <h1>Hello, {userName}</h1>
+            </form>
+          </div>
+        );
+      };
+
+      const Second = ({ data }) => {
+        const [products, setProducts] = React.useState([]);
+        React.useEffect(() => setProducts(data), []);
+
+        const handleClick = (e) => {
+          e.target.textContent === "+" &&
+            setProducts(
+              products.map((product) =>
+                product.name === e.target.name
+                  ? { name: product.name, votes: product.votes + 1 }
+                  : product
+              )
+            );
+          e.target.textContent === "-" &&
+            setProducts(
+              products.map((product) =>
+                product.name === e.target.name
+                  ? { name: product.name, votes: product.votes - 1 }
+                  : product
+              )
+            );
+        };
+
+        return (
+          <div className="second">
+            <h1>Second test</h1>
+            <p>Increment and decrement the votes for specific product</p>
+            <ul>
+              {products.map((product, i) => (
+                <li key={i}>
+                  <p>{`Item: ${product.name}, votes: ${product.votes}`}</p>
+                  <button name={product.name} onClick={handleClick}>
+                    +
+                  </button>
+                  <button name={product.name} onClick={handleClick}>
+                    -
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      };
+
+      const Third = ({ data }) => {
+        const [images, setImages] = React.useState([]);
+        React.useEffect(() => setImages(data), []);
+
+        return (
+          <div className="third">
+            <h1>Third test</h1>
+            <p>iterate through array of photos and delete the chosen one</p>
+            {images.map((image, i) => (
+              <div key={i}>
+                <img src={image} />
+                <button
+                  onClick={() =>
+                    setImages(images.filter((img) => img !== image))
+                  }
+                >
+                  X
+                </button>
+              </div>
+            ))}
+          </div>
+        );
+      };
+
+      const Forth = ({ data, clickList, clickItem }) => {
+        return (
+          <div className="forth">
+            <h1>Forth test</h1>
+            <p>Todo list, item clickable when "false", message to console</p>
+            <ul onClick={clickList}>
+              {data.map((item, i) => (
+                <li
+                  key={i}
+                  style={{
+                    backgroundColor: item.checked ? "green" : "red",
+                    color: "white",
+                  }}
+                  onClick={() => !item.checked && clickItem(item)}
+                >
+                  {item.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      };
+
+      const products = [
+        { name: "first", votes: 0 },
+        { name: "second", votes: 0 },
+      ];
+
+      const images = [
+        "https://upload.wikimedia.org/wikipedia/commons/1/14/Mac.svg",
+        "https://pngriver.com/wp-content/uploads/2017/12/download-Apple-tech-company-logo-PNG-transparent-images-transparent-backgrounds-PNGRIVER-COM-856497_apple_512x512.png",
+        "https://cdn3.iconfinder.com/data/icons/social-media-2163/512/apple_logo_socisl-512.png",
+      ];
+
+      const items = [
+        { name: "first", checked: true },
+        { name: "second", checked: true },
+        { name: "third", checked: false },
+        { name: "forth", checked: false },
+      ];
+
+      const clickList = () => console.log("List clicked");
+      const clickItem = (item) => console.log(`${item.name} was clicked`);
+
+      const App = () => (
+        <main>
+          <First />
+          <Second data={products} />
+          <Third data={images} />
+          <Forth data={items} clickList={clickList} clickItem={clickItem} />
+        </main>
+      );
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
+
+<html></html>
